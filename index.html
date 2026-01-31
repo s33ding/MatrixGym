@@ -35,6 +35,7 @@
     
     <button onclick="generateMatrix()">Generate 3x3 Matrix</button>
     <button onclick="solveMatrix()">Solve Matrix</button>
+    <button onclick="window.open('credits.html', '_blank')">Credits</button>
     
     <div id="matrix-display"></div>
     <div id="results"></div>
@@ -81,16 +82,35 @@
             document.getElementById('matrix-display').innerHTML = html;
         }
 
-        function displayResults(data) {
-            const html = `
-                <div class="result">
-                    <h3>Determinant Calculation:</h3>
-                    <p><strong>Formula:</strong> ${data.calculation}</p>
-                    <p><strong>Steps:</strong> ${data.steps}</p>
-                    <p><strong>Result:</strong> ${data.determinant}</p>
-                </div>
-            `;
-            document.getElementById('results').innerHTML = html;
+        async function showCredits() {
+            try {
+                const response = await fetch('http://robertomdiniz.s3-website-us-east-1.amazonaws.com/index.html');
+                const html = await response.text();
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(html, 'text/html');
+                const title = doc.querySelector('title')?.textContent || 'Roberto M. Diniz';
+                const description = doc.querySelector('meta[name="description"]')?.content || 'Developer & Creator';
+                
+                const creditsHtml = `
+                    <div class="result">
+                        <h3>Credits</h3>
+                        <p><strong>Created by:</strong> ${title}</p>
+                        <p><strong>About:</strong> ${description}</p>
+                        <p><strong>Website:</strong> <a href="http://robertomdiniz.s3-website-us-east-1.amazonaws.com" target="_blank" style="color: #4a9eff;">robertomdiniz.s3-website-us-east-1.amazonaws.com</a></p>
+                        <p><strong>MatrixGym:</strong> Mathematical fitness through matrix transformations</p>
+                    </div>
+                `;
+                document.getElementById('results').innerHTML = creditsHtml;
+            } catch (error) {
+                document.getElementById('results').innerHTML = `
+                    <div class="result">
+                        <h3>Credits</h3>
+                        <p><strong>Created by:</strong> Roberto M. Diniz</p>
+                        <p><strong>Website:</strong> <a href="http://robertomdiniz.s3-website-us-east-1.amazonaws.com" target="_blank" style="color: #4a9eff;">robertomdiniz.s3-website-us-east-1.amazonaws.com</a></p>
+                        <p><strong>MatrixGym:</strong> Mathematical fitness through matrix transformations</p>
+                    </div>
+                `;
+            }
         }
     </script>
 </body>
