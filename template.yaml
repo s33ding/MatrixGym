@@ -1,0 +1,84 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+
+Globals:
+  Function:
+    Timeout: 30
+    Runtime: python3.9
+    Architectures:
+      - x86_64
+
+Resources:
+  GymMatrixBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: gym-matrix
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: false
+        BlockPublicPolicy: false
+        IgnorePublicAcls: false
+        RestrictPublicBuckets: false
+      WebsiteConfiguration:
+        IndexDocument: index.html
+
+  GenerateMatrixFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: src/generate/
+      Handler: app.lambda_handler
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            Path: /generate
+            Method: post
+            RestApiId: !Ref ServerlessRestApi
+        Options:
+          Type: Api
+          Properties:
+            Path: /generate
+            Method: options
+            RestApiId: !Ref ServerlessRestApi
+      Environment:
+        Variables:
+          BUCKET_NAME: !Ref GymMatrixBucket
+
+  SolveMatrixFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: src/solve/
+      Handler: app.lambda_handler
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            Path: /solve
+            Method: post
+            RestApiId: !Ref ServerlessRestApi
+        Options:
+          Type: Api
+          Properties:
+            Path: /solve
+            Method: options
+            RestApiId: !Ref ServerlessRestApi
+      Environment:
+        Variables:
+          BUCKET_NAME: !Ref GymMatrixBucket
+
+  ServerlessRestApi:
+    Type: AWS::Serverless::Api
+    Properties:
+      StageName: Prod
+      Cors:
+        AllowMethods: "'POST,OPTIONS'"
+        AllowHeaders: "'Content-Type'"
+        AllowOrigin: "'*'"
+
+Outputs:
+  ApiUrl:
+    Description: "API Gateway endpoint URL"
+    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/"
+  
+  WebsiteUrl:
+    Description: "S3 Website URL"
+    Value: !GetAtt GymMatrixBucket.WebsiteURL

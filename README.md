@@ -1,3 +1,17 @@
-This repository contains a serverless web application built with AWS SAM focused on generating and solving analytical geometry exercises. Designed as a platform for "mathematical fitness," it utilizes matrix transformations to sharpen spatial reasoning and cognitive agility, treating math as a vital tool for personal development.
+# MatrixGym
 
-The application is architected to be modular, allowing for specialized filters such as Sahhaus, Laplace, and other determinant theories. By leveraging a serverless backend, MatrixGym provides a lightweight yet powerful environment to bridge abstract algebraic operations with geometric intuition.
+![MatrixGym Banner](assets/matrixgym_banner.png)
+
+A personal exploration into the intersection of mathematics and focus.
+
+This project started from a simple curiosity: can we use the tools we learn at university to build something that actually helps us practice and grow? MatrixGym is my attempt to answer that question through analytical geometry exercises powered by matrix transformations.
+
+I believe that practice sharpens focus, and focus is one of life's most valuable skills. By working through spatial reasoning problems and algebraic operations, we're not just doing math—we're training our minds to concentrate, persist, and think clearly.
+
+Built with AWS SAM as a serverless web application, this platform generates geometry exercises using modular filters like Sahhaus, Laplace, and other determinant theories. It's lightweight by design, bridging abstract mathematical concepts with geometric intuition through hands-on practice.
+
+## Live Demo
+
+🚀 **Try MatrixGym**: http://gym-matrix.s3-website-us-east-1.amazonaws.com
+
+Practice 3x3 matrix determinant calculations with step-by-step mathematical demonstrations using the Sarrus rule (diagonal method).

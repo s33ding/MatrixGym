@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>MatrixGym</title>
+    <style>
+        body { font-family: Arial; margin: 40px; }
+        .matrix { display: inline-block; margin: 20px; }
+        .matrix table { border-collapse: collapse; }
+        .matrix td { border: 1px solid #000; padding: 10px; text-align: center; width: 50px; }
+        button { padding: 10px 20px; margin: 10px; }
+        .result { margin: 20px 0; padding: 10px; background: #f0f0f0; }
+    </style>
+</head>
+<body>
+    <h1>MatrixGym - Mathematical Fitness</h1>
+    
+    <button onclick="generateMatrix()">Generate 3x3 Matrix</button>
+    <button onclick="solveMatrix()">Solve Matrix</button>
+    
+    <div id="matrix-display"></div>
+    <div id="results"></div>
+
+    <script>
+        let currentMatrix = null;
+        const API_URL = 'API_GATEWAY_URL_PLACEHOLDER';
+
+        async function generateMatrix() {
+            const response = await fetch(`${API_URL}/generate`, { method: 'POST' });
+            const data = await response.json();
+            currentMatrix = data.matrix;
+            displayMatrix(currentMatrix);
+        }
+
+        async function solveMatrix() {
+            if (!currentMatrix) return alert('Generate a matrix first!');
+            
+            const response = await fetch(`${API_URL}/solve`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ matrix: currentMatrix })
+            });
+            const data = await response.json();
+            displayResults(data);
+        }
+
+        function displayMatrix(matrix) {
+            const html = `
+                <div class="matrix">
+                    <table>
+                        ${matrix.map(row => `<tr>${row.map(cell => `<td>${cell}</td>`).join('')}</tr>`).join('')}
+                    </table>
+                </div>
+            `;
+            document.getElementById('matrix-display').innerHTML = html;
+        }
+
+        function displayResults(data) {
+            const html = `
+                <div class="result">
+                    <h3>Matrix Analysis:</h3>
+                    <p>Determinant: ${data.determinant?.toFixed(2)}</p>
+                    <p>Rank: ${data.rank}</p>
+                    <p>Eigenvalues: ${data.eigenvalues?.map(e => e.toFixed(2)).join(', ')}</p>
+                    ${data.inverse ? '<p>Matrix is invertible</p>' : '<p>Matrix is singular (not invertible)</p>'}
+                </div>
+            `;
+            document.getElementById('results').innerHTML = html;
+        }
+    </script>
+</body>
+</html>

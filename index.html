@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>MatrixGym</title>
+    <style>
+        body { 
+            font-family: Arial; 
+            margin: 0; 
+            padding: 40px; 
+            background: #1a1a1a; 
+            color: #e0e0e0; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            min-height: 100vh; 
+        }
+        .matrix { display: inline-block; margin: 20px; }
+        .matrix table { border-collapse: collapse; }
+        .matrix td { border: 1px solid #555; padding: 10px; text-align: center; width: 50px; background: #2a2a2a; }
+        button { 
+            padding: 10px 20px; 
+            margin: 10px; 
+            background: #333; 
+            color: #e0e0e0; 
+            border: 1px solid #555; 
+            cursor: pointer; 
+        }
+        button:hover { background: #444; }
+        .result { margin: 20px 0; padding: 10px; background: #2a2a2a; border: 1px solid #555; }
+        h1 { text-align: center; }
+    </style>
+</head>
+<body>
+    <h1>MatrixGym - Mathematical Fitness</h1>
+    
+    <button onclick="generateMatrix()">Generate 3x3 Matrix</button>
+    <button onclick="solveMatrix()">Solve Matrix</button>
+    
+    <div id="matrix-display"></div>
+    <div id="results"></div>
+
+    <script>
+        let currentMatrix = null;
+        const API_URL = 'https://ppr0f1pfhg.execute-api.us-east-1.amazonaws.com/Prod';
+
+        async function generateMatrix() {
+            const response = await fetch(`${API_URL}/generate`, { method: 'POST' });
+            const data = await response.json();
+            currentMatrix = data.matrix;
+            displayMatrix(currentMatrix);
+        }
+
+        async function solveMatrix() {
+            if (!currentMatrix) return alert('Generate a matrix first!');
+            
+            try {
+                console.log('Sending matrix:', currentMatrix);
+                const response = await fetch(`${API_URL}/solve`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ matrix: currentMatrix })
+                });
+                console.log('Response status:', response.status);
+                const data = await response.json();
+                console.log('Response data:', data);
+                displayResults(data);
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Error solving matrix: ' + error.message);
+            }
+        }
+
+        function displayMatrix(matrix) {
+            const html = `
+                <div class="matrix">
+                    <table>
+                        ${matrix.map(row => `<tr>${row.map(cell => `<td>${cell}</td>`).join('')}</tr>`).join('')}
+                    </table>
+                </div>
+            `;
+            document.getElementById('matrix-display').innerHTML = html;
+        }
+
+        function displayResults(data) {
+            const html = `
+                <div class="result">
+                    <h3>Determinant Calculation:</h3>
+                    <p><strong>Formula:</strong> ${data.calculation}</p>
+                    <p><strong>Steps:</strong> ${data.steps}</p>
+                    <p><strong>Result:</strong> ${data.determinant}</p>
+                </div>
+            `;
+            document.getElementById('results').innerHTML = html;
+        }
+    </script>
+</body>
+</html>
