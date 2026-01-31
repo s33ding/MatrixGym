@@ -1,0 +1,15 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      python: 3.9
+  build:
+    commands:
+      - echo Build started on `date`
+      - aws s3 cp index.html s3://gym-matrix/index.html
+      - aws s3 cp credits.html s3://gym-matrix/credits.html
+      - aws cloudfront create-invalidation --distribution-id EVM69T0V8XZID --paths "/*"
+  post_build:
+    commands:
+      - echo Build completed on `date`
