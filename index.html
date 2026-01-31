@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MatrixGym</title>
     <style>
         body { 
@@ -16,18 +17,35 @@
         }
         .matrix { display: inline-block; margin: 20px; }
         .matrix table { border-collapse: collapse; }
-        .matrix td { border: 1px solid #555; padding: 10px; text-align: center; width: 50px; background: #2a2a2a; }
+        .matrix td { border: 2px solid #555; padding: 20px; text-align: center; width: 80px; height: 80px; background: #2a2a2a; font-size: 24px; font-weight: bold; }
         button { 
-            padding: 10px 20px; 
+            padding: 15px 25px; 
             margin: 10px; 
             background: #333; 
             color: #e0e0e0; 
             border: 1px solid #555; 
             cursor: pointer; 
+            font-size: 16px;
         }
         button:hover { background: #444; }
-        .result { margin: 20px 0; padding: 10px; background: #2a2a2a; border: 1px solid #555; }
+        .result { margin: 20px 0; padding: 15px; background: #2a2a2a; border: 1px solid #555; max-width: 90%; }
         h1 { text-align: center; }
+        
+        @media (max-width: 768px) {
+            body { padding: 20px; }
+            .matrix td { padding: 15px; width: 60px; height: 60px; font-size: 20px; }
+            button { padding: 12px 20px; font-size: 14px; width: 90%; max-width: 200px; }
+            h1 { font-size: 24px; }
+            p { font-size: 14px; }
+        }
+        
+        @media (max-width: 480px) {
+            body { padding: 10px; }
+            .matrix td { padding: 10px; width: 50px; height: 50px; font-size: 18px; border: 1px solid #555; }
+            button { padding: 10px 15px; font-size: 14px; margin: 5px; }
+            h1 { font-size: 20px; }
+            .result { padding: 10px; font-size: 14px; }
+        }
     </style>
 </head>
 <body>
@@ -40,13 +58,7 @@
         Practice 3x3 determinant calculations using the <strong>Sarrus rule</strong> (diagonal method) to bridge 
         abstract mathematical concepts with geometric intuition.
     </p>
-    <div style="text-align: center; margin: 20px 0; padding: 15px; background: #2a2a2a; border: 1px solid #555; max-width: 500px;">
-        <h4 style="margin-top: 0;">Sarrus Rule Method:</h4>
-        <p style="font-size: 14px; margin: 5px 0;">Calculate 3x3 determinants using diagonal patterns</p>
-        <p style="font-size: 14px; margin: 5px 0;"><strong>Step 1:</strong> Add products of left-to-right diagonals</p>
-        <p style="font-size: 14px; margin: 5px 0;"><strong>Step 2:</strong> Subtract products of right-to-left diagonals</p>
-        <p style="font-size: 14px; margin: 5px 0;">Generate a matrix and click "Solve" to see it in action!</p>
-    </div>
+
     
     <button onclick="generateMatrix()">Generate 3x3 Matrix</button>
     <button onclick="solveMatrix()">Solve Matrix</button>
@@ -104,6 +116,7 @@
                 </div>
             `;
             document.getElementById('matrix-display').innerHTML = html;
+            document.getElementById('matrix-display').scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
 
         function displayResults(data) {
