@@ -12,6 +12,6 @@ Built with AWS SAM as a serverless web application, this platform generates geom
 
 ## Live Demo
 
-🚀 **Try MatrixGym**: http://gym-matrix.s3-website-us-east-1.amazonaws.com
+🚀 **Try MatrixGym**: https://gym.dataiesb.com
 
 Practice 3x3 matrix determinant calculations with step-by-step mathematical demonstrations using the Sarrus rule (diagonal method).
