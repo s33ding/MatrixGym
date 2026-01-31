@@ -32,6 +32,21 @@
 </head>
 <body>
     <h1>MatrixGym - Mathematical Fitness</h1>
+    <p style="text-align: center; font-style: italic; margin: 20px 0; color: #aaa;">
+        "Mathematics is the gymnasium of the mind." - Pythagoras
+    </p>
+    <p style="text-align: center; margin: 20px 0; max-width: 600px;">
+        Train your mind through analytical geometry exercises powered by matrix transformations. 
+        Practice 3x3 determinant calculations using the <strong>Sarrus rule</strong> (diagonal method) to bridge 
+        abstract mathematical concepts with geometric intuition.
+    </p>
+    <div style="text-align: center; margin: 20px 0; padding: 15px; background: #2a2a2a; border: 1px solid #555; max-width: 500px;">
+        <h4 style="margin-top: 0;">Sarrus Rule Method:</h4>
+        <p style="font-size: 14px; margin: 5px 0;">Calculate 3x3 determinants using diagonal patterns</p>
+        <p style="font-size: 14px; margin: 5px 0;"><strong>Step 1:</strong> Add products of left-to-right diagonals</p>
+        <p style="font-size: 14px; margin: 5px 0;"><strong>Step 2:</strong> Subtract products of right-to-left diagonals</p>
+        <p style="font-size: 14px; margin: 5px 0;">Generate a matrix and click "Solve" to see it in action!</p>
+    </div>
     
     <button onclick="generateMatrix()">Generate 3x3 Matrix</button>
     <button onclick="solveMatrix()">Solve Matrix</button>
@@ -52,7 +67,10 @@
         }
 
         async function solveMatrix() {
-            if (!currentMatrix) return alert('Generate a matrix first!');
+            if (!currentMatrix) {
+                alert('Generate a matrix first!');
+                return;
+            }
             
             try {
                 console.log('Sending matrix:', currentMatrix);
@@ -61,7 +79,13 @@
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ matrix: currentMatrix })
                 });
+                
                 console.log('Response status:', response.status);
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
                 const data = await response.json();
                 console.log('Response data:', data);
                 displayResults(data);
@@ -80,6 +104,18 @@
                 </div>
             `;
             document.getElementById('matrix-display').innerHTML = html;
+        }
+
+        function displayResults(data) {
+            const html = `
+                <div class="result">
+                    <h3>Determinant Calculation:</h3>
+                    <p><strong>Formula:</strong> ${data.calculation}</p>
+                    <p><strong>Steps:</strong> ${data.steps}</p>
+                    <p><strong>Result:</strong> ${data.determinant}</p>
+                </div>
+            `;
+            document.getElementById('results').innerHTML = html;
         }
 
         async function showCredits() {
