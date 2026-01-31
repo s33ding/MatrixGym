@@ -1,0 +1,3 @@
+This repository contains a serverless web application built with AWS SAM focused on generating and solving analytical geometry exercises. Designed as a platform for "mathematical fitness," it utilizes matrix transformations to sharpen spatial reasoning and cognitive agility, treating math as a vital tool for personal development.
+
+The application is architected to be modular, allowing for specialized filters such as Sahhaus, Laplace, and other determinant theories. By leveraging a serverless backend, MatrixGym provides a lightweight yet powerful environment to bridge abstract algebraic operations with geometric intuition.
